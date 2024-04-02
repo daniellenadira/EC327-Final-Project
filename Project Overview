@@ -1,0 +1,42 @@
+Overview for classes:
+
+spaceGuy 
+- position(x,y)
+- am i dead?
+- color
+- move side to side (a&d and left right arrows)
+- shoot with w and up arrow respectivly
+
+alien
+- positon (x,y,z)
+- am i dead?
+- color
+- shoot
+- collided with player?
+-speed (movement)
+
+bullet
+- position (x,y)
+- color
+-speed (alien bullet slower than player bullet
+-collided? (check with other objects)
+
+bunkers
+- color
+- lifespan
+
+scoreboard
+- increases with alien am i ded function gets changed
+- induvidual and total
+
+Lives
+- only if bullet collieds with player lose life
+- (if alien collides with play then game over)
+- 3 lives then end game
+- no aliens next level
+
+Front end stuff:
+Homepage
+endscreen
+leaderboard? (same session) 
+quit game at any point
