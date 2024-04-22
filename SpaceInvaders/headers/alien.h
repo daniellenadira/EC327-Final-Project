@@ -6,20 +6,28 @@
 using namespace std;
 
 #include <SDL.h>
-#include <game.h>
+
+//color codes 
+const int REDX = 225; const int REDY = 0; const int REDZ = 0;
+const int BLUEX = 0; const int BLUEY = 0; const int BLUEZ = 255;
 
 class Alien{
-    public:
-        Alien();
-        Alien(string team, int num); //team Red or Blue
-        ~Alien();
-        void drawAlien(SDL_Renderer* ren);
+public:
+    Alien();
+    Alien(string team, int num); //team Red or Blue
+    ~Alien();
+    void drawAlien(SDL_Renderer* ren);
+    void moveAlien(bool edge);
 
+    int posX;
+    int posY;
+    int moveSpeed;
 
+    SDL_Rect image; //the alien image, rn its just a rectangle 
 
-    private:
-        string color;
-        int num; //which alien it is in the array of all of them
+private:
+    string color;
+    int num; //which alien it is in the array of all of them
 
 
 };

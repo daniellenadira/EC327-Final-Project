@@ -3,11 +3,17 @@
 
 #include <iostream>
 #include <alien.h>
+#include <test.h>
 #include <SDL.h>
 
 using namespace std;
 
-const int initialAlienNum = 3;
+const int initialAlienNum = 7;
+const int initialAlienSpacing = 50;
+
+//window params
+const int RightWinEdge = 800;
+const int BottonWinEdge = 600;
 
 
 class Game{
@@ -21,11 +27,12 @@ class Game{
         void render();
         void draw();
         
-        
-
-        //this part isn't compiling rn and idk whyyyyyyyy
-        Alien* redAliens = new Alien[initialAlienNum]; //array of Red aliens;
-        Alien* blueAliens = new Alien[initialAlienNum]; //array of Blue aliens;
+        Alien* aliens = new Alien[initialAlienNum];
+        int redAliens;
+        int blueAliens;
+        int firstAlien;
+        int lastAlien;
+        bool alienHitEdge;
 
         SDL_Renderer* ren;
         SDL_Window* win;
@@ -37,6 +44,4 @@ class Game{
 
 };
 
-
-//*/
 #endif
