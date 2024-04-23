@@ -1,0 +1,27 @@
+Start Screen
+  -Welcome
+  -start button
+    -exit start screen and go to game window when pressed
+
+Scoreboard (on the top of the screen)
+  -Red kill count
+  -Blue kill count
+  -Red lives left
+  -Blue lives left
+
+Protective bunkers (do we still want?)
+  -tentative- time permitting
+
+-bullets hitting aliens and aliens dying
+  dying- alien turns black
+
+-bullet hitting user
+  live count goes down
+  when all lives are gone- game over
+
+end screen
+  display 'you win' if all aliens killed, 'game over' if u die
+  -display scores of each player
+  -leaderboard? (tentative)
+  -play again
+  -quit
