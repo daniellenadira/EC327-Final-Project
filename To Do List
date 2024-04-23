@@ -1,9 +1,11 @@
-Start Screen
+Start Screen - David
   -Welcome
   -start button
     -exit start screen and go to game window when pressed
 
-Scoreboard (on the top of the screen)
+Game images- making rectangles be actual images - Ale
+
+Scoreboard (on the top of the screen) - Dani
   -Red kill count
   -Blue kill count
   -Red lives left
@@ -12,14 +14,13 @@ Scoreboard (on the top of the screen)
 Protective bunkers (do we still want?)
   -tentative- time permitting
 
--bullets hitting aliens and aliens dying
+-bullets hitting aliens and aliens dying - Abby
   dying- alien turns black
-
 -bullet hitting user
   live count goes down
   when all lives are gone- game over
 
-end screen
+end screen - David
   display 'you win' if all aliens killed, 'game over' if u die
   -display scores of each player
   -leaderboard? (tentative)
