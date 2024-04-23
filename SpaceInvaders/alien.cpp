@@ -1,9 +1,8 @@
 #include "alien.h"
 
 Alien::Alien(){
-    color = "Red"; //defalut to red idk
+    color = "";
     num = 0;
-    //cout << " default alien created"<< endl;
 }
 
 Alien::Alien(string team, int num){
@@ -12,7 +11,7 @@ Alien::Alien(string team, int num){
 
     moveSpeed = 30;
 
-    posX = 50+num*100;
+    posX = 50+num*100; //this spacing will have to change when we upload the image
     posY = 100;
 
 }
@@ -24,11 +23,10 @@ Alien::~Alien(){
 void Alien::drawAlien(SDL_Renderer* ren){
     
     //example rectangle
-    //make a color to delete it before you move it
     if(color=="Red"){ //red or blue rectangle
-        SDL_SetRenderDrawColor(ren, REDX, REDY, REDZ, 255);
+        SDL_SetRenderDrawColor(ren, 225, 0, 0, 255);
     } else{
-        SDL_SetRenderDrawColor(ren, BLUEX, BLUEY, BLUEZ, 255);
+        SDL_SetRenderDrawColor(ren, 0, 0, 225, 255);
     }
     image.x = posX;
     image.y = posY; 
