@@ -1,7 +1,5 @@
 #include "game.h"
 
-//window sizes
-
 Game::Game(){
 
     //window parameters
@@ -11,12 +9,16 @@ Game::Game(){
     running = true;
     count = 0;
     
+    //initialize players
+    p1 = Player("Red", 100);
+    p2 = Player("Blue", 400);
+
     //initialize aliens
     firstAlien = 0;
     lastAlien = initialAlienNum-1;
     alienHitEdge = false;
 
-    //randomizing colors
+        //randomizing colors
     redAliens = 0;
     blueAliens = 0;
     int num = rand() % 2;
@@ -33,6 +35,8 @@ Game::Game(){
         aliens[i] = Alien(color, i);
     }
 
+
+    //start looping through the game
     loop();
 
 }
@@ -56,14 +60,54 @@ void Game::loop() { //currently have the game just set to ending after 10 second
             count++;
         }
 
-        render();
-        input();
         update();
+        render();
 
-        if(count>10){ //after 5 seconds end game
+        if(count>10){ //after 10 seconds end game
             running = false;
         }
     }
+}
+
+//keyboard event updating
+void Game::update(){
+    
+    SDL_Event event;
+
+   while (SDL_PollEvent(&event)) {
+    if (event.type == SDL_KEYDOWN) {
+        string name = SDL_GetKeyName(event.key.keysym.sym);
+        if(name=="A"){
+            p1.moveLeft = true;
+        }else if(name =="D"){
+            p1.moveRight = true;
+        }else if(name == "W"){
+            p1.shoot = true;
+        }else if(name == "Left"){
+            p2.moveLeft = true;
+        }else if(name == "Right"){
+            p2.moveRight = true;
+        }else if(name == "Up"){
+            p2.shoot = true;
+        }
+        
+    }else if (event.type == SDL_KEYUP) {
+        string name = SDL_GetKeyName(event.key.keysym.sym);
+        if(name=="A"){
+            p1.moveLeft = false;
+        }else if(name =="D"){
+            p1.moveRight = false;
+        }else if(name == "W"){
+            p1.shoot = false;
+        }else if(name == "Left"){
+            p2.moveLeft = false;
+        }else if(name == "Right"){
+            p2.moveRight = false;
+        }else if(name == "Up"){
+            p2.shoot = false;
+        }
+    }
+   }
 }
 
 void Game::render(){ //update everything **if this is too slow might need to render things individually 
@@ -86,7 +130,7 @@ void Game::render(){ //update everything **if this is too slow might need to ren
         rect.h = BottonWinEdge;
         SDL_RenderFillRect(ren, &rect);
         
-        //draw everythin else
+        //draw everything else
         draw();
     }
 
@@ -95,16 +139,51 @@ void Game::render(){ //update everything **if this is too slow might need to ren
 
 void Game::draw(){
 
+    //players
+    if(p1.posX+100 > RightWinEdge){
+        p1.hitRightEdge = true;
+    }else{ p1.hitRightEdge = false;}
+    if(p1.posX<0){
+        p1.hitLeftEdge = true;
+    }else{ p1.hitLeftEdge = false;}
+
+    p1.movePlayer();
+    p1.drawPlayer(ren);
+
+    if(p2.posX+100 > RightWinEdge){
+        p2.hitRightEdge = true;
+    }else{ p2.hitRightEdge = false;}
+    if(p2.posX<0){
+        p2.hitLeftEdge = true;
+    }else{ p2.hitLeftEdge = false;}
+
+    p2.movePlayer();
+    p2.drawPlayer(ren);
+
+
+    //aliens
+    //check if they are at the edge
     if(aliens[lastAlien].posX+50 > RightWinEdge || aliens[firstAlien].posX<0){
         alienHitEdge = true;
     }else{
         alienHitEdge = false;   
     }
-
      //drawing in aliens
-     for(int i = 0; i<initialAlienNum; i++){
+     for(int i = 0; i<(blueAliens+redAliens); i++){
         aliens[i].drawAlien(ren);
         aliens[i].moveAlien(alienHitEdge);
     }
+
+    //bullets
+    if(p1.shoot==true){
+        bulletStack.append(p1.posX,p1.posY,p1.color);
+    }
+    if(p2.shoot==true){
+        cout<< p2.posX<< " "<< p2.posY << endl;
+        bulletStack.append(p2.posX,p2.posY,p2.color);
+    }
+    bulletStack.checkForOffScreen();
+    bulletStack.moveBullet();
+    bulletStack.drawBullet(ren);
 
 }
