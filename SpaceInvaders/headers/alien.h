@@ -7,9 +7,6 @@ using namespace std;
 
 #include <SDL.h>
 
-//color codes 
-const int REDX = 225; const int REDY = 0; const int REDZ = 0;
-const int BLUEX = 0; const int BLUEY = 0; const int BLUEZ = 255;
 
 class Alien{
 public:

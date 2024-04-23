@@ -2,12 +2,16 @@
 #define GAME
 
 #include <iostream>
-#include <alien.h>
-#include <test.h>
+#include <map>
 #include <SDL.h>
+
+#include <alien.h>
+#include <player.h>
+#include <stack.h>
 
 using namespace std;
 
+//initial alien params
 const int initialAlienNum = 7;
 const int initialAlienSpacing = 50;
 
@@ -15,18 +19,22 @@ const int initialAlienSpacing = 50;
 const int RightWinEdge = 800;
 const int BottonWinEdge = 600;
 
+//color codes 
+const int REDX = 225; const int REDY = 0; const int REDZ = 0;
+const int BLUEX = 0; const int BLUEY = 0; const int BLUEZ = 255;
+   
 
 class Game{
     public:
         Game();
         ~Game();
 
-        void loop();
-        void update() {}
-        void input() {}
-        void render();
-        void draw();
+        void loop(); 
+        void render(); //for updating screen
+        void update(); //for keyboard presses
+        void draw(); 
         
+        //alien stuff
         Alien* aliens = new Alien[initialAlienNum];
         int redAliens;
         int blueAliens;
@@ -34,6 +42,14 @@ class Game{
         int lastAlien;
         bool alienHitEdge;
 
+        //player stuff
+        Player p1;
+        Player p2;
+
+        //stack for the bullets
+        stack bulletStack;
+
+        //window params
         SDL_Renderer* ren;
         SDL_Window* win;
 
