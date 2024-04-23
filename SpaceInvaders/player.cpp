@@ -26,7 +26,7 @@ void Player::drawPlayer(SDL_Renderer* ren){
     }
     image.x = posX;
     image.y = posY; 
-    image.w = 100;
+    image.w = 50;
     image.h = 25;
     SDL_RenderFillRect(ren, &image);
 }

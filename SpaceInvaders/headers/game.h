@@ -47,7 +47,8 @@ class Game{
         Player p2;
 
         //stack for the bullets
-        stack bulletStack;
+        stack playerBulletStack;
+        stack alienBulletStack;
 
         //window params
         SDL_Renderer* ren;

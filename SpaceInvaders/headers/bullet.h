@@ -7,7 +7,6 @@ using namespace std;
 
 const int width = 5;
 const int height = 10;
-const int bulletSpeed = 45;
 
 class bullet{
     private:

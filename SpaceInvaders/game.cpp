@@ -35,7 +35,6 @@ Game::Game(){
         aliens[i] = Alien(color, i);
     }
 
-
     //start looping through the game
     loop();
 
@@ -120,7 +119,7 @@ void Game::render(){ //update everything **if this is too slow might need to ren
     }
 
     //draw stuff
-    if((frameCount%10)==0){
+    if((frameCount%10)==0){ //how often to update the image
         //make screen black and redraw stuff
         SDL_Rect rect;
         SDL_SetRenderDrawColor(ren, 0, 0, 0, 255); //just a black rectangle
@@ -175,15 +174,27 @@ void Game::draw(){
     }
 
     //bullets
+    //player bullets
     if(p1.shoot==true){
-        bulletStack.append(p1.posX,p1.posY,p1.color);
+        playerBulletStack.append(p1.posX,p1.posY,p1.color);
     }
     if(p2.shoot==true){
         cout<< p2.posX<< " "<< p2.posY << endl;
-        bulletStack.append(p2.posX,p2.posY,p2.color);
+        playerBulletStack.append(p2.posX,p2.posY,p2.color);
     }
-    bulletStack.checkForOffScreen();
-    bulletStack.moveBullet();
-    bulletStack.drawBullet(ren);
+    playerBulletStack.checkForOffScreen();
+    playerBulletStack.moveBullet(playerBulletStack.playerBulletSpeed);
+    playerBulletStack.drawBullet(ren);
 
+    //alien bullets
+    if(alienBulletStack.timeBetweenBullets >= 10){
+        for(int i = 0; i<redAliens+blueAliens; i++){
+            alienBulletStack.append(aliens[i].posX, aliens[i].posY, "White");
+        }
+        alienBulletStack.timeBetweenBullets = 0;
+    }
+    alienBulletStack.timeBetweenBullets++;
+    playerBulletStack.checkForOffScreen();
+    alienBulletStack.moveBullet(alienBulletStack.alienBulletSpeed);
+    alienBulletStack.drawBullet(ren);
 }

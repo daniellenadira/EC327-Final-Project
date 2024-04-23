@@ -3,6 +3,7 @@
 stack::stack(){
 	numBullets = 0;
 	head = NULL;
+    timeBetweenBullets = 0;
 }
 
 
@@ -60,8 +61,10 @@ void stack::drawBullet(SDL_Renderer* ren){
         //example rectangle
         if(temp->color=="Red"){ //red or blue rectangle
             SDL_SetRenderDrawColor(ren, 225, 0, 0, 255);
-        } else{
+        } else if (temp->color == "Blue"){
             SDL_SetRenderDrawColor(ren, 0, 0, 225, 255);
+        }else{
+            SDL_SetRenderDrawColor(ren, 255, 255, 255, 255);
         }
         temp->image.x = temp->posX;
         temp->image.y = temp->posY; 
@@ -73,11 +76,11 @@ void stack::drawBullet(SDL_Renderer* ren){
 
 }
 
-void stack::moveBullet(){
+void stack::moveBullet(int speed){
     bullet* temp = head;
 
     for(int i = 0; i< numBullets; i++){
-        temp->posY -= bulletSpeed;
+        temp->posY += speed;
         temp = temp->getNext();
     }
 
@@ -87,7 +90,7 @@ void stack::checkForOffScreen(){
     bullet* temp = head;
 
     for(int i = 0; i< numBullets; i++){
-        if(temp->posY+height<0){
+        if(temp->posY+height<0 || temp->posY>600){
             remove(temp->posX, temp->posY);
         }
         temp = temp->getNext();
