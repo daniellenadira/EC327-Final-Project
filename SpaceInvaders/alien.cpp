@@ -1,47 +1,23 @@
 #include "alien.h"
 
-Alien::Alien(){
-    color = "";
-    num = 0;
+Alien::Alien(string c, Alien * a) {
+    static int numAliens = 0;
+    numAliens++;
+	posX = aWidth+numAliens*100; //can change this spacing
+	posY = 100; //can change this spacing too
+    next = a;
+    color = c;
 }
 
-Alien::Alien(string team, int num){
-    color = team;
-    this->num = num; //which alien it is in the array
 
-    moveSpeed = 30;
-
-    posX = 50+num*100; //this spacing will have to change when we upload the image
-    posY = 100;
-
+Alien* Alien::getNext()  {
+	return next;
 }
 
-Alien::~Alien(){
-    //put destructors here
+void Alien::setNext(Alien * n) {
+	this->next = n;
 }
 
-void Alien::drawAlien(SDL_Renderer* ren){
-    
-    //example rectangle
-    if(color=="Red"){ //red or blue rectangle
-        SDL_SetRenderDrawColor(ren, 225, 0, 0, 255);
-    } else{
-        SDL_SetRenderDrawColor(ren, 0, 0, 225, 255);
-    }
-    image.x = posX;
-    image.y = posY; 
-    image.w = 50;
-    image.h = 50;
-    SDL_RenderFillRect(ren, &image);
-    
-}
 
-void Alien::moveAlien(bool edge){
 
-    if(edge){
-        moveSpeed = moveSpeed*(-1);
-    }
-    posX+= moveSpeed;
-    //posY+= 25;
-    
-}
+

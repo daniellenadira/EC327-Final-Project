@@ -14,25 +14,21 @@ Game::Game(){
     p2 = Player("Blue", 400);
 
     //initialize aliens
-    firstAlien = 0;
-    lastAlien = initialAlienNum-1;
-    alienHitEdge = false;
-
         //randomizing colors
-    redAliens = 0;
-    blueAliens = 0;
+    aliens.numRedAliens = 0;
+    aliens.numBlueAliens = 0;
     int num = rand() % 2;
     string color;
     for(int i = 0; i<initialAlienNum; i++){
-        if(num==0 && redAliens!=(initialAlienNum/2)){
+        
+        if(num==0 && aliens.numRedAliens!=(initialAlienNum/2)){
             color = "Red";
-            redAliens++;
         }else{
             color = "Blue";
-            blueAliens++;
         }
         num = rand() % 2;
-        aliens[i] = Alien(color, i);
+        cout<<"num red:"<<aliens.numRedAliens<<" num blue:"<< aliens.numBlueAliens<<endl;
+        aliens.append(color);
     }
 
     //start looping through the game
@@ -44,8 +40,6 @@ Game::~Game(){
     SDL_DestroyRenderer(ren);
     SDL_DestroyWindow(win);
     SDL_Quit();
-
-    delete aliens;
 }
 
 void Game::loop() { //currently have the game just set to ending after 10 seconds but we gotta add end parameters and stuff
@@ -161,17 +155,9 @@ void Game::draw(){
 
 
     //aliens
-    //check if they are at the edge
-    if(aliens[lastAlien].posX+50 > RightWinEdge || aliens[firstAlien].posX<0){
-        alienHitEdge = true;
-    }else{
-        alienHitEdge = false;   
-    }
      //drawing in aliens
-     for(int i = 0; i<(blueAliens+redAliens); i++){
-        aliens[i].drawAlien(ren);
-        aliens[i].moveAlien(alienHitEdge);
-    }
+    aliens.moveAlien();
+    aliens.drawAlien(ren);
 
     //bullets
     //player bullets
@@ -186,7 +172,7 @@ void Game::draw(){
     playerBulletStack.moveBullet(playerBulletStack.playerBulletSpeed);
     playerBulletStack.drawBullet(ren);
 
-    //alien bullets
+    /*alien bullets
     if(alienBulletStack.timeBetweenBullets >= 10){
         for(int i = 0; i<redAliens+blueAliens; i++){
             alienBulletStack.append(aliens[i].posX, aliens[i].posY, "White");
@@ -197,5 +183,5 @@ void Game::draw(){
     playerBulletStack.checkForOffScreen();
     alienBulletStack.moveBullet(alienBulletStack.alienBulletSpeed);
     alienBulletStack.drawBullet(ren);
-    
+    */
 }

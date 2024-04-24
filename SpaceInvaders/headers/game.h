@@ -2,18 +2,16 @@
 #define GAME
 
 #include <iostream>
-#include <map>
 #include <SDL.h>
 
-#include <alien.h>
 #include <player.h>
 #include <stack.h>
+#include <alienStack.h>
 
 using namespace std;
 
 //initial alien params
-const int initialAlienNum = 7;
-const int initialAlienSpacing = 50;
+const int initialAlienNum = 3;
 
 //window params
 const int RightWinEdge = 800;
@@ -34,13 +32,8 @@ class Game{
         void update(); //for keyboard presses
         void draw(); 
         
-        //alien stuff
-        Alien* aliens = new Alien[initialAlienNum];
-        int redAliens;
-        int blueAliens;
-        int firstAlien;
-        int lastAlien;
-        bool alienHitEdge;
+        //stack for the aliens
+        alienStack aliens;
 
         //player stuff
         Player p1;

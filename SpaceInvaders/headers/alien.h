@@ -7,26 +7,24 @@ using namespace std;
 
 #include <SDL.h>
 
+const int aWidth = 50;
+const int aHeight = 50;
+
 
 class Alien{
-public:
-    Alien();
-    Alien(string team, int num); //team Red or Blue
-    ~Alien();
-    void drawAlien(SDL_Renderer* ren);
-    void moveAlien(bool edge);
+    private:
+		Alien * next;
 
-    int posX;
-    int posY;
-    int moveSpeed;
+    public:
+		int posX;
+		int posY;
+		string color;
+        
+		Alien(string color, Alien * a);
+		Alien* getNext();
+		void setNext(Alien * n);
 
-    SDL_Rect image; //the alien image, rn its just a rectangle 
-
-private:
-    string color;
-    int num; //which alien it is in the array of all of them
-
-
+    	SDL_Rect image; //upload alien image
 };
 
 #endif 
