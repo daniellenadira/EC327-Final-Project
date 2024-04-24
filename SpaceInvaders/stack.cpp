@@ -2,7 +2,7 @@
 
 stack::stack(){
 	numBullets = 0;
-	head = NULL;
+	head = nullptr;
     timeBetweenBullets = 0;
 }
 
@@ -19,8 +19,6 @@ void stack::append(int x, int y, string c){
     bullet* temp = this->head;
 	this->head = new bullet(x, y, c, temp);
 	this->numBullets++;
-    //cout<<"bullet added at x:"<< head->posX<< " and y:"<< head->posY<<endl;
-    //printStack();
 }
 
 void stack::remove(int x, int y){
@@ -28,11 +26,8 @@ void stack::remove(int x, int y){
     bullet* temp = this->head;
     if(x==temp->posX&&y==temp->posY){
         head = temp->getNext();
-        //cout<<"removed at x:"<< temp->posX<<" and y:"<< temp->posY<<endl;
         delete temp;
         numBullets--;
-        //cout << "first one being removed" <<endl;
-        //printStack();
         return;
     }
 
@@ -42,15 +37,12 @@ void stack::remove(int x, int y){
     for(int i= 0; i<numBullets;i++){
         if(x==temp->posX&&y==temp->posY){
             if(i=numBullets-1){//means its the last one
-                //cout<< "last one being removed i:"<< i<< " tot:"<< numBullets<< endl; 
                 before->setNext(nullptr);
             }else{
                 before->setNext(temp->getNext());
             }
-            cout<<"removed at x:"<< temp->posX<<" and y:"<< temp->posY<<endl;
             delete temp;
             numBullets--;
-            //printStack();
             return;
         }
         temp = temp->getNext();
@@ -92,9 +84,9 @@ void stack::moveBullet(int speed){
 
 void stack::checkForOffScreen(){
     bullet* temp = head;
-
-    for(int i = 0; i< numBullets; i++){
+    while(temp!=nullptr){
         if(temp->posY+height<0 || temp->posY>600){
+            cout<<"debug remove x:"<<temp->posX<< " y:"<<temp->posY << " numB:" <<numBullets<<endl;
             remove(temp->posX, temp->posY);
         }
         temp = temp->getNext();
@@ -104,7 +96,7 @@ void stack::checkForOffScreen(){
 void stack::checkAlienHit(){
     bullet* temp = head;
     for(int i = 0; i<numBullets;i++){
-        
+
     }
 
 }

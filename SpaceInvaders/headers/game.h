@@ -40,7 +40,8 @@ class Game{
         Player p2;
 
         //stack for the bullets
-        stack playerBulletStack;
+        stack redBulletStack;
+        stack blueBulletStack;
         stack alienBulletStack;
 
         //window params

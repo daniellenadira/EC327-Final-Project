@@ -7,7 +7,7 @@
 using namespace std;
 
 
-const int moveSpeed = 25;
+const int moveSpeed = 45;
 
 class Player{
 public:
