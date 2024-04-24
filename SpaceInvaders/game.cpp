@@ -179,7 +179,7 @@ void Game::draw(){
         playerBulletStack.append(p1.posX,p1.posY,p1.color);
     }
     if(p2.shoot==true){
-        cout<< p2.posX<< " "<< p2.posY << endl;
+        //cout<< p2.posX<< " "<< p2.posY << endl;
         playerBulletStack.append(p2.posX,p2.posY,p2.color);
     }
     playerBulletStack.checkForOffScreen();
@@ -197,4 +197,5 @@ void Game::draw(){
     playerBulletStack.checkForOffScreen();
     alienBulletStack.moveBullet(alienBulletStack.alienBulletSpeed);
     alienBulletStack.drawBullet(ren);
+    
 }

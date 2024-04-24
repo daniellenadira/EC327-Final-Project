@@ -19,7 +19,8 @@ void stack::append(int x, int y, string c){
     bullet* temp = this->head;
 	this->head = new bullet(x, y, c, temp);
 	this->numBullets++;
-    cout<<"bullet added at x:"<< head->posX<< " and y:"<< head->posY<<endl;
+    //cout<<"bullet added at x:"<< head->posX<< " and y:"<< head->posY<<endl;
+    //printStack();
 }
 
 void stack::remove(int x, int y){
@@ -27,17 +28,21 @@ void stack::remove(int x, int y){
     bullet* temp = this->head;
     if(x==temp->posX&&y==temp->posY){
         head = temp->getNext();
-        cout<<"removed at x:"<< temp->posX<<" and y:"<< temp->posY<<endl;
+        //cout<<"removed at x:"<< temp->posX<<" and y:"<< temp->posY<<endl;
         delete temp;
         numBullets--;
+        //cout << "first one being removed" <<endl;
+        //printStack();
         return;
     }
+
     temp = temp->getNext(); //should be pointing to 2
     bullet* before = this->head; //pointing to 1
 
     for(int i= 0; i<numBullets;i++){
         if(x==temp->posX&&y==temp->posY){
             if(i=numBullets-1){//means its the last one
+                //cout<< "last one being removed i:"<< i<< " tot:"<< numBullets<< endl; 
                 before->setNext(nullptr);
             }else{
                 before->setNext(temp->getNext());
@@ -45,6 +50,7 @@ void stack::remove(int x, int y){
             cout<<"removed at x:"<< temp->posX<<" and y:"<< temp->posY<<endl;
             delete temp;
             numBullets--;
+            //printStack();
             return;
         }
         temp = temp->getNext();
@@ -73,7 +79,6 @@ void stack::drawBullet(SDL_Renderer* ren){
         SDL_RenderFillRect(ren, &temp->image);
         temp = temp->getNext();
     }
-
 }
 
 void stack::moveBullet(int speed){
@@ -83,7 +88,6 @@ void stack::moveBullet(int speed){
         temp->posY += speed;
         temp = temp->getNext();
     }
-
 }
 
 void stack::checkForOffScreen(){
@@ -95,6 +99,21 @@ void stack::checkForOffScreen(){
         }
         temp = temp->getNext();
     }
+}
 
+void stack::checkAlienHit(){
+    bullet* temp = head;
+    for(int i = 0; i<numBullets;i++){
+        
+    }
 
+}
+
+void stack::printStack(){
+    bullet* temp = head;
+    for(int i = 0; i<numBullets; i++){
+        cout<< "bullet #"<< i << " xpos:"<< temp->posX << " ypos:"<< temp->posY <<endl;
+        temp = temp->getNext();
+    }
+    cout<< endl;
 }

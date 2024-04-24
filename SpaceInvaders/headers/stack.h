@@ -12,7 +12,7 @@ public:
 	void remove(int x, int y); //remove at an x/y position
 
     const int playerBulletSpeed = -45;
-    const int alienBulletSpeed = 25;
+    const int alienBulletSpeed = 15;
     int timeBetweenBullets;
 
     int numBullets;
@@ -21,5 +21,7 @@ public:
 	void drawBullet(SDL_Renderer* ren);
 	void moveBullet(int speed);
     void checkForOffScreen();
+    void checkAlienHit();
+    void printStack();
 
 };
