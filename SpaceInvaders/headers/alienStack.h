@@ -21,6 +21,8 @@ public:
     void drawAlien(SDL_Renderer* ren);
     void moveAlien();
 
+    void hit();
+
     void printStack();
 
 };

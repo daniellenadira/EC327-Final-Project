@@ -36,7 +36,7 @@ void stack::remove(int x, int y){
 
     for(int i= 0; i<numBullets;i++){
         if(x==temp->posX&&y==temp->posY){
-            if(i=numBullets-1){//means its the last one
+            if(i==numBullets-1){//means its the last one
                 before->setNext(nullptr);
             }else{
                 before->setNext(temp->getNext());
@@ -66,8 +66,8 @@ void stack::drawBullet(SDL_Renderer* ren){
         }
         temp->image.x = temp->posX;
         temp->image.y = temp->posY; 
-        temp->image.w = width;
-        temp->image.h = height;
+        temp->image.w = bWidth;
+        temp->image.h = bHeight;
         SDL_RenderFillRect(ren, &temp->image);
         temp = temp->getNext();
     }
@@ -85,21 +85,15 @@ void stack::moveBullet(int speed){
 void stack::checkForOffScreen(){
     bullet* temp = head;
     while(temp!=nullptr){
-        if(temp->posY+height<0 || temp->posY>600){
-            cout<<"debug remove x:"<<temp->posX<< " y:"<<temp->posY << " numB:" <<numBullets<<endl;
+        if(temp->posY+bHeight<0 || temp->posY>600){
+            //cout<<"debug remove x:"<<temp->posX<< " y:"<<temp->posY << " numB:" <<numBullets<<endl;
             remove(temp->posX, temp->posY);
         }
         temp = temp->getNext();
     }
 }
 
-void stack::checkAlienHit(){
-    bullet* temp = head;
-    for(int i = 0; i<numBullets;i++){
 
-    }
-
-}
 
 void stack::printStack(){
     bullet* temp = head;

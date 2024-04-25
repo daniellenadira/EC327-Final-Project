@@ -19,10 +19,13 @@ class Alien{
 		int posX;
 		int posY;
 		string color;
+        bool hit;
         
 		Alien(string color, Alien * a);
 		Alien* getNext();
 		void setNext(Alien * n);
+        int getRightPos();
+        int getTopPos();
 
     	SDL_Rect image; //upload alien image
 };

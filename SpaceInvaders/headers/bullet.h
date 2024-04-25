@@ -5,8 +5,8 @@
 #include <SDL.h>
 using namespace std;
 
-const int width = 5;
-const int height = 10;
+const int bWidth = 5;
+const int bHeight = 5;
 
 class bullet{
     private:
@@ -17,6 +17,8 @@ class bullet{
 		bullet(int x, int y, string color, bullet * b);
 		bullet* getNext();
 		void setNext(bullet * b);
+        int getRightPos();
+        int getTopPos();
 
 		
     	SDL_Rect image; //upload bullet image

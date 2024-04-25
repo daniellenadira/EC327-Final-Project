@@ -198,9 +198,44 @@ void Game::draw(){
     }
     alienBulletStack.timeBetweenBullets++;
 
-    //alienBulletStack.checkForOffScreen();
-    //alienBulletStack.moveBullet(alienBulletStack.alienBulletSpeed);
-    //alienBulletStack.drawBullet(ren);
+    alienBulletStack.checkForOffScreen();
+    alienBulletStack.moveBullet(alienBulletStack.alienBulletSpeed);
+    alienBulletStack.drawBullet(ren);
     
     
+    //check to see if a red bullet has hit an alien
+    bullet* temp = redBulletStack.head;
+    while(temp!=nullptr){
+        bulletHitAlien(temp);
+        temp = temp->getNext();
+    }
+
+    //check to see if a blue bullet has hit an alien
+    temp = blueBulletStack.head;
+    while(temp!=nullptr){
+        bulletHitAlien(temp);
+        temp = temp->getNext();
+    }
+
+}
+
+
+
+void Game::bulletHitAlien(bullet* b){
+    Alien* temp = aliens.head;
+    string c = b->color;
+    bool change = false;
+    while(temp!=nullptr){
+        if(temp->color==c){
+            if((temp->posX <= b->posX && temp->getRightPos() >= b->getRightPos()) && (temp->posY <= b->posY && temp->getTopPos() >= b->getTopPos())){
+                cout<< c<< " Alien Hit!"<< endl;
+                temp->hit = true;
+                change = true;
+            }
+        }
+        temp= temp->getNext();
+    }
+    if(change==true){
+        aliens.hit();
+    }
 }

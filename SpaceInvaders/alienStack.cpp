@@ -33,10 +33,6 @@ void alienStack::remove(int x, int y){
             this->numRedAliens++;
         }else{ this->numBlueAliens++;}
         delete temp;
-
-        cout << "first one being removed" <<endl;
-        printStack();
-
         return;
     }
 
@@ -45,18 +41,16 @@ void alienStack::remove(int x, int y){
 
     for(int i= 0; i<(numRedAliens+numBlueAliens);i++){
         if(x==temp->posX&&y==temp->posY){
-            if(i=(numRedAliens+numBlueAliens)-1){//means its the last one
+            if(i==(numRedAliens+numBlueAliens)-1){//means its the last one
                 //cout<< "last one being removed i:"<< i<< " tot:"<< numBullets<< endl; 
                 before->setNext(nullptr);
             }else{
                 before->setNext(temp->getNext());
             }
-            cout<<"removed at x:"<< temp->posX<<" and y:"<< temp->posY<<endl;
             if(temp->color=="Red"){
                 this->numRedAliens++;
             }else{ this->numBlueAliens++;}
             delete temp;
-            printStack();
             return;
         }
         temp = temp->getNext();
@@ -111,8 +105,41 @@ void alienStack::printStack(){
     Alien* temp = head;
     for(int i = 0; i<(numRedAliens+numBlueAliens); i++){
         cout<<" i:"<<i<<" num:"<<(numRedAliens+numBlueAliens)<<endl;
-        cout<< "Alien #"<< i << " xpos:"<< temp->posX << " ypos:"<< temp->posY <<endl;
+        cout<< "Alien #"<< i << " xpos:"<< temp->posX << " ypos:"<< temp->posY <<" color:" << temp->color<< " hit:"<< temp->hit<<endl;
         temp = temp->getNext();
     }
     cout<< endl;
+}
+
+void alienStack::hit(){
+    Alien* temp = head;
+
+    if( temp->hit==true){ //if the first one in the stack got hit
+        head = temp->getNext();
+        if(temp->color=="Red"){
+            numRedAliens--;
+        }else{numBlueAliens--;}
+        delete temp;
+        cout<<"alien removed"<<endl;
+        return;
+    }
+
+    temp = temp->getNext();
+    Alien* before = head;
+
+    while(temp != nullptr){
+        if(temp->hit==true){
+            if(temp->color=="Red"){
+                numRedAliens--;
+            }else{numBlueAliens--;}
+
+            before->setNext(temp->getNext());
+            delete temp;
+            cout<<"alien removed"<<endl;
+            return;
+
+        } 
+        before = before->getNext();
+        temp = temp->getNext();
+    }
 }

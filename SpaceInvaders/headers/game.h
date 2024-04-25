@@ -44,6 +44,8 @@ class Game{
         stack blueBulletStack;
         stack alienBulletStack;
 
+        void bulletHitAlien(bullet* b);
+
         //window params
         SDL_Renderer* ren;
         SDL_Window* win;

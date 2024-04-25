@@ -7,6 +7,7 @@ Alien::Alien(string c, Alien * a) {
 	posY = 100; //can change this spacing too
     next = a;
     color = c;
+    hit = false;
 }
 
 
@@ -20,4 +21,10 @@ void Alien::setNext(Alien * n) {
 
 
 
+int Alien::getRightPos(){
+    return posX+aWidth;
+}
 
+int Alien::getTopPos(){
+    return posY+aHeight;
+}

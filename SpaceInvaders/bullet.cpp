@@ -17,3 +17,10 @@ void bullet::setNext(bullet * n) {
 	this->next = n;
 }
 
+int bullet::getRightPos(){
+    return posX+bWidth;
+}
+
+int bullet::getTopPos(){
+    return posY+bHeight;
+}
