@@ -85,7 +85,7 @@ void stack::moveBullet(int speed){
 void stack::checkForOffScreen(){
     bullet* temp = head;
     while(temp!=nullptr){
-        if(temp->posY+bHeight<0 || temp->posY>600){
+        if(temp->posY+bHeight<0 || temp->posY>525){
             //cout<<"debug remove x:"<<temp->posX<< " y:"<<temp->posY << " numB:" <<numBullets<<endl;
             remove(temp->posX, temp->posY);
         }

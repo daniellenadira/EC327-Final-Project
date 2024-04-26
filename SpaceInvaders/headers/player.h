@@ -8,6 +8,8 @@ using namespace std;
 
 
 const int moveSpeed = 45;
+const int pWidth = 50;
+const int pHeight = 25;
 
 class Player{
 public:
@@ -17,11 +19,18 @@ public:
 
     void drawPlayer(SDL_Renderer* ren);
     void movePlayer();
+    int getRightPos();
+    int getTopPos();
+    void minusLives();
+
     SDL_Rect image; //exmple image for player (just a rectangle rn)
 
     string color; //what team they are on
     int posX;
     int posY;
+    int lives;
+
+
 
 
     bool hitLeftEdge;

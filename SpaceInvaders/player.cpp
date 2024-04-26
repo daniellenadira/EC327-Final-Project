@@ -9,12 +9,14 @@ Player::Player(){
     shoot = false;
     hitLeftEdge = false;
     hitRightEdge = false;
+    lives = 0;
 }
 
 Player::Player(string color, int startPos){
     this->color = color;
     posX = startPos;
     posY = 500;
+    lives = 3;
 }
 
 void Player::drawPlayer(SDL_Renderer* ren){
@@ -26,8 +28,8 @@ void Player::drawPlayer(SDL_Renderer* ren){
     }
     image.x = posX;
     image.y = posY; 
-    image.w = 50;
-    image.h = 25;
+    image.w = pWidth;
+    image.h = pHeight;
     SDL_RenderFillRect(ren, &image);
 }
     
@@ -38,6 +40,19 @@ void Player::movePlayer(){
     }else if(moveRight==true && hitRightEdge ==false){
         posX+= moveSpeed;
     }
+}
 
 
+int Player::getRightPos(){
+    return posX+pWidth;
+}
+
+
+int Player::getTopPos(){
+    return posY+pHeight;
+}
+
+
+void Player::minusLives(){
+    lives--;
 }

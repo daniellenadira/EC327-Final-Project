@@ -4,15 +4,14 @@ Game::Game(){
 
     //window parameters
     SDL_Init(0);
-    SDL_CreateWindowAndRenderer(RightWinEdge, BottonWinEdge, 0, &win, &ren);
+    SDL_CreateWindowAndRenderer(RightWinEdge, BottonWinEdge+50, 0, &win, &ren);
     SDL_SetWindowTitle(win, "Space Invaders");
     running = true;
     count = 0;
-    
     //initialize players
     p1 = Player("Red", 100);
     p2 = Player("Blue", 400);
-
+    
     //initialize aliens
         //randomizing colors
     aliens.numRedAliens = 0;
@@ -29,10 +28,6 @@ Game::Game(){
         num = rand() % 2;
         aliens.append(color);
     }
-
-    //start looping through the game
-    loop();
-
 }
 
 Game::~Game(){
@@ -41,25 +36,29 @@ Game::~Game(){
     SDL_Quit();
 }
 
-void Game::loop() { //currently have the game just set to ending after 10 seconds but we gotta add end parameters and stuff
+int Game::loop() { 
     while(running){
-
         lastFrame=SDL_GetTicks();
         static int lastTime;
         if(lastFrame>= (lastTime+1000)){
             lastTime = lastFrame;
             frameCount = 0;
         }
-        
         count++;
 
+
+        //loops through these two to update and then render the game
         update();
         render();
 
-        if(count>1000){ //after 10 seconds end game
+
+        //game ends after all aliens dead or all people dead
+        if((aliens.numBlueAliens+aliens.numRedAliens<=0) || (p1.lives+p2.lives<=0)){
+            //returns the players score
             running = false;
         }
     }
+    return initialAlienNum-aliens.numRedAliens-aliens.numBlueAliens;
 }
 
 //keyboard event updating
@@ -68,7 +67,7 @@ void Game::update(){
     SDL_Event event;
 
     //failsafe bc idk why the keys are starting to move automatically
-    if(count<5){
+    if(count<1){
         p1.moveLeft = false;
         p1.moveRight = false;
         p1.shoot = false;
@@ -114,7 +113,6 @@ void Game::update(){
 }
 
 void Game::render(){ //update everything **if this is too slow might need to render things individually 
-    
 
     frameCount++;
     int timerFPS= SDL_GetTicks()-lastFrame;
@@ -124,7 +122,7 @@ void Game::render(){ //update everything **if this is too slow might need to ren
 
     //draw stuff
     if((frameCount%10)==0){ //how often to update the image
-        //make screen black and redraw stuff
+        //gameplay area
         SDL_Rect rect;
         SDL_SetRenderDrawColor(ren, 0, 0, 0, 255); //just a black rectangle
         rect.x = 0;
@@ -132,61 +130,106 @@ void Game::render(){ //update everything **if this is too slow might need to ren
         rect.w = RightWinEdge;
         rect.h = BottonWinEdge;
         SDL_RenderFillRect(ren, &rect);
+
+        //scoreboard area
+        SDL_Rect rect2;
+        SDL_SetRenderDrawColor(ren, 105, 105, 105, 255); //just a black rectangle
+        rect2.x = 0;
+        rect2.y = BottonWinEdge; 
+        rect2.w = RightWinEdge;
+        rect2.h = BottonWinEdge+50;
+        SDL_RenderFillRect(ren, &rect2);
         
     
-
-        //draw everything else
-        draw();
+        move(); //moves everything 
+        hit(); //checks if anything has hit
+        draw(); //draws everthing
+        updateScoreBoard(); //DANIS SECTIONNNNNNNNNNNNNNNN
     }
 
     SDL_RenderPresent(ren);
 }
 
+
+void Game::updateScoreBoard(){
+    /* update the scoreboard:
+    helpful variables are:
+    player one lives is: p1.lives;
+    player two lives is: p2.lives;
+    number of red aliens left is: aliens.numRedAliens;
+    number of blue aliens left is: aliens.numBlueAliens;
+
+    */
+}
+
+
+
 void Game::draw(){
 
     //players
-    if(p1.posX+100 > RightWinEdge){
-        p1.hitRightEdge = true;
-    }else{ p1.hitRightEdge = false;}
-    if(p1.posX<0){
-        p1.hitLeftEdge = true;
-    }else{ p1.hitLeftEdge = false;}
+    if(p1.lives>0){
+        p1.drawPlayer(ren);
+        redBulletStack.drawBullet(ren);
+    }
 
-    p1.movePlayer();
-    p1.drawPlayer(ren);
+    if(p2.lives>0){
+        p2.drawPlayer(ren);
+        blueBulletStack.drawBullet(ren);
+    }
+    
+    //aliens
+    aliens.drawAlien(ren);
+    alienBulletStack.drawBullet(ren);
+    
+}
 
-    if(p2.posX+100 > RightWinEdge){
-        p2.hitRightEdge = true;
-    }else{ p2.hitRightEdge = false;}
-    if(p2.posX<0){
-        p2.hitLeftEdge = true;
-    }else{ p2.hitLeftEdge = false;}
 
-    p2.movePlayer();
-    p2.drawPlayer(ren);
+void Game::move(){
 
+    //p1
+    if(p1.lives>0){
+        //player
+        if(p1.posX+100 > RightWinEdge){
+                p1.hitRightEdge = true;
+        }else{ p1.hitRightEdge = false;}
+        if(p1.posX<0){
+            p1.hitLeftEdge = true;
+        }else{ p1.hitLeftEdge = false;}
+
+        p1.movePlayer();
+
+        //bullets
+        if(p1.shoot==true){
+            redBulletStack.append(p1.posX,p1.posY,p1.color);
+        }
+        redBulletStack.checkForOffScreen();
+        redBulletStack.moveBullet(redBulletStack.playerBulletSpeed);
+
+    }
+
+    //p2
+    if(p2.lives>0){
+        //player
+        if(p2.posX+100 > RightWinEdge){
+            p2.hitRightEdge = true;
+        }else{ p2.hitRightEdge = false;}
+        if(p2.posX<0){
+            p2.hitLeftEdge = true;
+        }else{ p2.hitLeftEdge = false;}
+
+        p2.movePlayer();
+        
+        //bullets
+        if(p2.shoot==true){
+            blueBulletStack.append(p2.posX,p2.posY,p2.color);
+        }
+        blueBulletStack.checkForOffScreen();
+        blueBulletStack.moveBullet(blueBulletStack.playerBulletSpeed);
+    }
 
     //aliens
-     //drawing in aliens
     aliens.moveAlien();
-    aliens.drawAlien(ren);
-
-    //bullets
-    //player bullets
-    if(p1.shoot==true){
-        redBulletStack.append(p1.posX,p1.posY,p1.color);
-    }
-    if(p2.shoot==true){
-        blueBulletStack.append(p2.posX,p2.posY,p2.color);
-    }
-    redBulletStack.checkForOffScreen();
-    redBulletStack.moveBullet(redBulletStack.playerBulletSpeed);
-    redBulletStack.drawBullet(ren);
-
-    blueBulletStack.checkForOffScreen();
-    blueBulletStack.moveBullet(blueBulletStack.playerBulletSpeed);
-    blueBulletStack.drawBullet(ren);
-
+    
     //alien bullets
     if(alienBulletStack.timeBetweenBullets >= 10){
         Alien* temp = aliens.head;
@@ -200,9 +243,9 @@ void Game::draw(){
 
     alienBulletStack.checkForOffScreen();
     alienBulletStack.moveBullet(alienBulletStack.alienBulletSpeed);
-    alienBulletStack.drawBullet(ren);
-    
-    
+}
+
+void Game::hit(){
     //check to see if a red bullet has hit an alien
     bullet* temp = redBulletStack.head;
     while(temp!=nullptr){
@@ -217,8 +260,31 @@ void Game::draw(){
         temp = temp->getNext();
     }
 
+    //check to see if alien bullets hit players
+    if(p1.lives>0){
+        temp = alienBulletStack.head;
+        while(temp!=nullptr){
+            if((temp->posX >= p1.posX && temp->getRightPos() <= p1.getRightPos()) && (temp->posY >= p1.posY && temp->getTopPos() <= p1.getTopPos())){
+                    cout<< "Player Hit!"<< endl;
+                    p1.minusLives();
+                    alienBulletStack.remove(temp->posX, temp->posY);
+            }
+            temp = temp ->getNext();
+        }
+    }
+    
+    if(p2.lives>0){
+        temp = alienBulletStack.head;
+        while(temp!=nullptr){
+            if((temp->posX >= p2.posX && temp->getRightPos() <= p2.getRightPos()) && (temp->posY >= p2.posY && temp->getTopPos() <= p2.getTopPos())){
+                    cout<< "Player Hit!"<< endl;
+                    p2.minusLives();
+                    alienBulletStack.remove(temp->posX, temp->posY);
+            }
+            temp = temp ->getNext();
+        }
+    }
 }
-
 
 
 void Game::bulletHitAlien(bullet* b){
@@ -239,3 +305,4 @@ void Game::bulletHitAlien(bullet* b){
         aliens.hit();
     }
 }
+

@@ -15,7 +15,7 @@ const int initialAlienNum = 3;
 
 //window params
 const int RightWinEdge = 800;
-const int BottonWinEdge = 600;
+const int BottonWinEdge = 550;
 
 //color codes 
 const int REDX = 225; const int REDY = 0; const int REDZ = 0;
@@ -27,10 +27,13 @@ class Game{
         Game();
         ~Game();
 
-        void loop(); 
+        int loop(); 
         void render(); //for updating screen
         void update(); //for keyboard presses
         void draw(); 
+        void move();
+        void hit();
+        void updateScoreBoard(); //DANI DO THE SCOREBOARD STUFF HERE
         
         //stack for the aliens
         alienStack aliens;
@@ -54,7 +57,6 @@ class Game{
         bool running;
         int count;
         int frameCount, timerFPS, lastFrame;
-
 };
 
 #endif
