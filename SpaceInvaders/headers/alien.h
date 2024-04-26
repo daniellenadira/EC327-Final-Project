@@ -21,7 +21,7 @@ class Alien{
 		string color;
         bool hit;
         
-		Alien(string color, Alien * a);
+		Alien(string color, Alien * a, int num);
 		Alien* getNext();
 		void setNext(Alien * n);
         int getRightPos();

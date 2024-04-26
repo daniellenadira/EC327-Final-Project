@@ -1,32 +1,31 @@
 #include "game.h"
 
-Game::Game(){
-
+Game::Game(int r){
+    round = r;
     //window parameters
     SDL_Init(0);
     SDL_CreateWindowAndRenderer(RightWinEdge, BottonWinEdge+50, 0, &win, &ren);
     SDL_SetWindowTitle(win, "Space Invaders");
     running = true;
     count = 0;
+
     //initialize players
     p1 = Player("Red", 100);
     p2 = Player("Blue", 400);
     
     //initialize aliens
-        //randomizing colors
+    initialAlienNum = round+1;//each round add an alien
     aliens.numRedAliens = 0;
     aliens.numBlueAliens = 0;
-    int num = rand() % 2;
     string color;
-    for(int i = 0; i<initialAlienNum; i++){
+    for(int i = 0; i<initialAlienNum*2; i++){
         
-        if(num==0 && aliens.numRedAliens!=(initialAlienNum/2)){
+        if(i%2==0){
             color = "Red";
         }else{
             color = "Blue";
         }
-        num = rand() % 2;
-        aliens.append(color);
+        aliens.append(color, i+1);
     }
 }
 
@@ -36,7 +35,7 @@ Game::~Game(){
     SDL_Quit();
 }
 
-int Game::loop() { 
+int* Game::loop() { 
     while(running){
         lastFrame=SDL_GetTicks();
         static int lastTime;
@@ -58,7 +57,11 @@ int Game::loop() {
             running = false;
         }
     }
-    return initialAlienNum-aliens.numRedAliens-aliens.numBlueAliens;
+    int* ptr = new int[3];
+    ptr[0] = initialAlienNum-aliens.numRedAliens;
+    ptr[1] = initialAlienNum-aliens.numBlueAliens;
+    ptr[2] = (p1.lives)+(p2.lives)+0;
+    return ptr;
 }
 
 //keyboard event updating
@@ -67,7 +70,7 @@ void Game::update(){
     SDL_Event event;
 
     //failsafe bc idk why the keys are starting to move automatically
-    if(count<1){
+    if(count<2){
         p1.moveLeft = false;
         p1.moveRight = false;
         p1.shoot = false;
@@ -231,7 +234,7 @@ void Game::move(){
     aliens.moveAlien();
     
     //alien bullets
-    if(alienBulletStack.timeBetweenBullets >= 10){
+    if(alienBulletStack.timeBetweenBullets >= 30-round*2){
         Alien* temp = aliens.head;
         for(int i = 0; i<(aliens.numRedAliens+aliens.numBlueAliens); i++){
             alienBulletStack.append(temp->posX, temp->posY, "White");
@@ -265,7 +268,7 @@ void Game::hit(){
         temp = alienBulletStack.head;
         while(temp!=nullptr){
             if((temp->posX >= p1.posX && temp->getRightPos() <= p1.getRightPos()) && (temp->posY >= p1.posY && temp->getTopPos() <= p1.getTopPos())){
-                    cout<< "Player Hit!"<< endl;
+                    cout<< "Red Player Hit!"<< endl;
                     p1.minusLives();
                     alienBulletStack.remove(temp->posX, temp->posY);
             }
@@ -277,7 +280,7 @@ void Game::hit(){
         temp = alienBulletStack.head;
         while(temp!=nullptr){
             if((temp->posX >= p2.posX && temp->getRightPos() <= p2.getRightPos()) && (temp->posY >= p2.posY && temp->getTopPos() <= p2.getTopPos())){
-                    cout<< "Player Hit!"<< endl;
+                    cout<< "Blue Player Hit!"<< endl;
                     p2.minusLives();
                     alienBulletStack.remove(temp->posX, temp->posY);
             }

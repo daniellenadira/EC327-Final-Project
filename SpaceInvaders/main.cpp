@@ -8,12 +8,18 @@ int main(int argc, char* args[] ){
     //StartingScreen s;
 
     //the game
-    Game g;
-    int score = g.loop();
-
+    int round = 0;
+    int score = 0;
+    int* ptr;
+   do{
+        round++;
+        Game g(round);
+        ptr = g.loop();
+        score += ptr[0]+ptr[1];
+        cout<<"Red score:"<<ptr[0]<< " Blue Score:" << ptr[1]<<endl;
+    }while(ptr[2]>0);
     //score to put on leaderboard
-    cout<<"Score:"<<score<<endl;
-
+    cout<< "Total aliens killed: "<<score<<endl;
 
     //make an ending screen with leaderboard and ability to play again?
     

@@ -16,9 +16,9 @@ alienStack::~alienStack(){
 	}
 }
 
-void alienStack::append( string c){
+void alienStack::append( string c, int num){
     Alien* temp = this->head;
-	this->head = new Alien(c, temp);
+	this->head = new Alien(c, temp, num);
     if(c=="Red"){
         this->numRedAliens++;
     }else{ this->numBlueAliens++;}
@@ -81,23 +81,31 @@ void alienStack::drawAlien(SDL_Renderer* ren){
 }
 
 void alienStack::moveAlien(){
+    hitEdge();
+
     Alien* temp = head;
-    //check to see if at edge of screen
-    if(temp->posX+aWidth>800){ //check for left side
-        moveSpeed = moveSpeed*(-1);
-    }else{ //check for right size
-        while(temp->getNext()!=nullptr){
-            temp = temp->getNext();
-        }  
-        if(temp->posX<0){
-            moveSpeed = moveSpeed*(-1);
-        }
-    }
+    //move them
     temp = head;
-    for(int i = 0; i< (numRedAliens+numBlueAliens); i++){
+    while(temp!=nullptr){
         temp->posX+= moveSpeed;
         temp = temp->getNext();
     }    
+}
+
+void alienStack::hitEdge(){
+    Alien* temp = head;
+    //check to see if at edge of screen
+    while(temp!=nullptr){
+        if(temp->posX+aWidth>800){ //check for right side
+            moveSpeed = moveSpeed*(-1);
+            return;
+        }
+        if(temp->posX<0){ //check left side
+            moveSpeed = moveSpeed*(-1);
+            return;
+        }
+        temp = temp->getNext();
+    }
 }
 
 
@@ -120,7 +128,7 @@ void alienStack::hit(){
             numRedAliens--;
         }else{numBlueAliens--;}
         delete temp;
-        cout<<"alien removed"<<endl;
+        //cout<<"alien removed"<<endl;
         return;
     }
 
@@ -135,7 +143,7 @@ void alienStack::hit(){
 
             before->setNext(temp->getNext());
             delete temp;
-            cout<<"alien removed"<<endl;
+            //cout<<"alien removed"<<endl;
             return;
 
         } 

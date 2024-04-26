@@ -10,9 +10,6 @@
 
 using namespace std;
 
-//initial alien params
-const int initialAlienNum = 3;
-
 //window params
 const int RightWinEdge = 800;
 const int BottonWinEdge = 550;
@@ -24,10 +21,12 @@ const int BLUEX = 0; const int BLUEY = 0; const int BLUEZ = 255;
 
 class Game{
     public:
-        Game();
+        Game(int r);
         ~Game();
 
-        int loop(); 
+        int round;
+
+        int* loop(); 
         void render(); //for updating screen
         void update(); //for keyboard presses
         void draw(); 
@@ -37,6 +36,7 @@ class Game{
         
         //stack for the aliens
         alienStack aliens;
+        int initialAlienNum;
 
         //player stuff
         Player p1;

@@ -1,10 +1,13 @@
 #include "alien.h"
 
-Alien::Alien(string c, Alien * a) {
-    static int numAliens = 0;
-    numAliens++;
-	posX = aWidth+numAliens*100; //can change this spacing
-	posY = 100; //can change this spacing too
+Alien::Alien(string c, Alien * a, int num) {
+    int h = 100;
+    while(num>6){
+        h+=75;
+        num-=6;
+    }
+	posX = aWidth+num*100; //can change this spacing
+	posY = h; //can change this spacing too
     next = a;
     color = c;
     hit = false;
