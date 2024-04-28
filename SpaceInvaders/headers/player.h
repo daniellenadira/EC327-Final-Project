@@ -4,7 +4,7 @@
 #include <iostream>
 #include <string>
 #include <SDL.h>
-#include <SDL2/SDL_image.h>
+#include <SDL_image.h>
 using namespace std;
 
 

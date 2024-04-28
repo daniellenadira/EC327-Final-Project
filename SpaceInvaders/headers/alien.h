@@ -6,7 +6,7 @@
 using namespace std;
 
 #include <SDL.h>
-#include <SDL2/SDL_image.h>
+#include <SDL_image.h>
 
 const int aWidth = 50;
 const int aHeight = 50;

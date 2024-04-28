@@ -1,6 +1,6 @@
 //the stack that holds all of the aleins
 #include "alien.h"
-#include <SDL2/SDL_image.h>
+#include "SDL_image.h"
 
 
 class alienStack{
