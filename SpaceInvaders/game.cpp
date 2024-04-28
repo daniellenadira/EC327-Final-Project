@@ -14,19 +14,11 @@ Game::Game(int r){
     p2 = Player("Blue", 400);
     
     //initialize aliens
-<<<<<<< Updated upstream
     initialAlienNum = round+1;//each round add an alien
-=======
-    //randomizing colors
->>>>>>> Stashed changes
     aliens.numRedAliens = 0;
     aliens.numBlueAliens = 0;
     string color;
-<<<<<<< Updated upstream
     for(int i = 0; i<initialAlienNum*2; i++){
-=======
-    for(int i = 0; i < initialAlienNum; i++){
->>>>>>> Stashed changes
         
         if(i%2==0){
             color = "Red";
@@ -126,25 +118,15 @@ void Game::update(){
 void Game::render(){ //update everything **if this is too slow might need to render things individually 
 
     frameCount++;
-    int timerFPS = SDL_GetTicks()-lastFrame;
-    if(timerFPS < (1000/40)){
-        SDL_Delay((1000/40) - timerFPS); //60 frames per second        
+    int timerFPS= SDL_GetTicks()-lastFrame;
+    if(timerFPS<(1000/60)){
+        SDL_Delay((1000/60)-timerFPS); //60 frames per second        
     }
 
-    SDL_RenderClear(ren);
-    draw();
-    SDL_RenderPresent(ren);
-     SDL_SetRenderDrawColor(ren, 0, 0, 0, 255);
-
-    lastFrame = SDL_GetTicks(); 
     //draw stuff
-<<<<<<< Updated upstream
+    
     if((frameCount%10)==0){ //how often to update the image
         //gameplay area
-=======
-    /*if((frameCount%10)==0){ //how often to update the image
-        //make screen black and redraw stuff
->>>>>>> Stashed changes
         SDL_Rect rect;
         SDL_SetRenderDrawColor(ren, 0, 0, 0, 255); //just a black rectangle
         rect.x = 0;
@@ -169,9 +151,8 @@ void Game::render(){ //update everything **if this is too slow might need to ren
         updateScoreBoard(); //DANIS SECTIONNNNNNNNNNNNNNNN
     }
 
-    
     SDL_RenderPresent(ren);
-    */
+    
 }
 
 

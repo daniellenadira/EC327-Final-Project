@@ -28,6 +28,8 @@ class Alien{
         int getRightPos();
         int getTopPos();
 
+		//void setAWidth();
+
     	SDL_Rect image; //upload alien image
 };
 
