@@ -21,16 +21,27 @@ Player::Player(string color, int startPos){
 
 void Player::drawPlayer(SDL_Renderer* ren){
     //example rectangle
-    if(color=="Red"){ //red or blue rectangle
-        SDL_SetRenderDrawColor(ren, 225, 0, 0, 255);
+    IMG_Init(IMG_INIT_JPG| IMG_INIT_PNG);
+    SDL_Surface* playerSurface;
+
+    if(color== "Red"){ 
+        playerSurface = IMG_Load("Images/redPlayer.png");
+        //SDL_SetRenderDrawColor(ren, 225, 0, 0, 255);
     } else{
-        SDL_SetRenderDrawColor(ren, 0, 0, 255, 255);
+        playerSurface = IMG_Load("Images/bluePlayer.png");
+        //SDL_SetRenderDrawColor(ren, 0, 0, 255, 255);
     }
+    SDL_Texture* playerTexture = SDL_CreateTextureFromSurface(ren, playerSurface);
+    SDL_FreeSurface(playerSurface); 
+    
+    //SDL_QueryTexture(playerTexture, NULL, NULL, &pWidth, &pHeight);
+    //setPWidth();
     image.x = posX;
     image.y = posY; 
-    image.w = pWidth;
-    image.h = pHeight;
-    SDL_RenderFillRect(ren, &image);
+    image.w = 50;
+    image.h = 50;
+    SDL_RenderCopy(ren, playerTexture, NULL, &image);
+    //SDL_RenderFillRect(ren, &image);
 }
     
 void Player::movePlayer(){
@@ -41,6 +52,19 @@ void Player::movePlayer(){
         posX+= moveSpeed;
     }
 }
+
+/*void Player::setPWidth(){
+
+    SDL_Surface* playerSurface;
+    IMG_Init(IMG_INIT_JPG| IMG_INIT_PNG);
+    playerSurface = IMG_Load("Images/bluePlayer.png");
+    SDL_Renderer * ren = nullptr;
+    SDL_Texture* playerTexture = SDL_CreateTextureFromSurface(ren, playerSurface);
+    SDL_FreeSurface(playerSurface); 
+    SDL_QueryTexture(playerTexture, NULL, NULL, &pWidth, &pHeight);
+}
+*/
+
 
 
 int Player::getRightPos(){

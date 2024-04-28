@@ -63,18 +63,31 @@ void alienStack::remove(int x, int y){
 
 void alienStack::drawAlien(SDL_Renderer* ren){
     Alien* temp = head;
+    SDL_Surface* alienSurface;
+    IMG_Init(IMG_INIT_JPG| IMG_INIT_PNG);
+    
     for(int i = 0; i<(numRedAliens+numBlueAliens); i++){
         //example rectangle
         if(temp->color=="Red"){ //red or blue rectangle
-            SDL_SetRenderDrawColor(ren, 225, 0, 0, 255);
+            //SDL_SetRenderDrawColor(ren, 225, 0, 0, 255);
+            alienSurface = IMG_Load("Images/redAlien.png");
         } else{
-            SDL_SetRenderDrawColor(ren, 0, 0, 225, 255);
+            //SDL_SetRenderDrawColor(ren, 0, 0, 225, 255);
+            alienSurface = IMG_Load("Images/blueAlien.png");
         }
+
+        SDL_Texture* alienTexture = SDL_CreateTextureFromSurface(ren, alienSurface);
+        SDL_FreeSurface(alienSurface); 
+
+        //Get texture width and height
+        //temp->setAWidth();
+    
+        //Define where on the screen to define Image
         temp->image.x = temp->posX;
         temp->image.y = temp->posY; 
         temp->image.w = aWidth;
         temp->image.h = aHeight;
-        SDL_RenderFillRect(ren, &temp->image);
+        SDL_RenderCopy(ren, alienTexture, NULL, &temp->image);
         temp = temp->getNext();
     }
     
@@ -96,7 +109,7 @@ void alienStack::hitEdge(){
     Alien* temp = head;
     //check to see if at edge of screen
     while(temp!=nullptr){
-        if(temp->posX+aWidth>800){ //check for right side
+        if(temp->posX+ aWidth>800){ //check for right side
             moveSpeed = moveSpeed*(-1);
             return;
         }

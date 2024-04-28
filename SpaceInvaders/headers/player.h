@@ -4,6 +4,7 @@
 #include <iostream>
 #include <string>
 #include <SDL.h>
+#include <SDL2/SDL_image.h>
 using namespace std;
 
 
@@ -22,15 +23,15 @@ public:
     int getRightPos();
     int getTopPos();
     void minusLives();
+    //void setPWidth();
 
     SDL_Rect image; //exmple image for player (just a rectangle rn)
 
     string color; //what team they are on
+
     int posX;
     int posY;
     int lives;
-
-
 
 
     bool hitLeftEdge;
