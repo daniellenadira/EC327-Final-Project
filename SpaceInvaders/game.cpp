@@ -1,25 +1,29 @@
 #include "game.h"
 
-Game::Game(int r){
+Game::Game(int r, int s, int p1Lives, int p2Lives){
     round = r;
+    runningScore = s;
+    cout<<"starting round "<<r<<endl;
+
     //window parameters
     SDL_Init(0);
+    TTF_Init();
     SDL_CreateWindowAndRenderer(RightWinEdge, BottonWinEdge+50, 0, &win, &ren);
     SDL_SetWindowTitle(win, "Space Invaders");
     running = true;
     count = 0;
 
     //initialize players
-    p1 = Player("Red", 100);
-    p2 = Player("Blue", 400);
+    p1 = Player("Red", 100, p1Lives);
+    p2 = Player("Blue", 400, p2Lives);
     
     //initialize aliens
+    aliens = alienStack(round);
     initialAlienNum = round+1;//each round add an alien
     aliens.numRedAliens = 0;
     aliens.numBlueAliens = 0;
     string color;
     for(int i = 0; i<initialAlienNum*2; i++){
-        
         if(i%2==0){
             color = "Red";
         }else{
@@ -27,11 +31,26 @@ Game::Game(int r){
         }
         aliens.append(color, i+1);
     }
+
+    //scoreboard text params
+    TTF_Font* Sans = TTF_OpenFont("Graphics/Sans.ttf", 10);
+    SDL_Color White = {255, 255, 255};
+    string text = "Red Lives:          Blue Lives:           Score:              Quit";
+    SDL_Surface* surfaceMessage = TTF_RenderText_Solid(Sans, text.c_str(), White); 
+    if (!surfaceMessage) {
+        std::cerr << "Failed to load text! TTF Error: " << TTF_GetError() << std::endl;
+        return;
+    }
+    TTF_CloseFont(Sans);
+    sbText = SDL_CreateTextureFromSurface(ren, surfaceMessage);
+    SDL_FreeSurface(surfaceMessage);
+
 }
 
 Game::~Game(){
     SDL_DestroyRenderer(ren);
     SDL_DestroyWindow(win);
+    TTF_Quit();
     SDL_Quit();
 }
 
@@ -58,9 +77,9 @@ int* Game::loop() {
         }
     }
     int* ptr = new int[3];
-    ptr[0] = initialAlienNum-aliens.numRedAliens;
-    ptr[1] = initialAlienNum-aliens.numBlueAliens;
-    ptr[2] = (p1.lives)+(p2.lives)+0;
+    ptr[0] = initialAlienNum*2-aliens.numRedAliens-aliens.numBlueAliens+runningScore;
+    ptr[1] = (p1.lives);
+    ptr[2] = (p2.lives);
     return ptr;
 }
 
@@ -68,50 +87,47 @@ int* Game::loop() {
 void Game::update(){
     
     SDL_Event event;
+    while (SDL_PollEvent(&event)) {
 
-    //failsafe bc idk why the keys are starting to move automatically
-    if(count<2){
-        p1.moveLeft = false;
-        p1.moveRight = false;
-        p1.shoot = false;
-        p2.moveLeft = false;
-        p2.moveRight = false;
-        p2.shoot = false;
-    }
-
-   while (SDL_PollEvent(&event)&&count>100) {
-    if (event.type == SDL_KEYDOWN) {
-        string name = SDL_GetKeyName(event.key.keysym.sym);
-
-        if(name=="A"){
-            p1.moveLeft = true;
-        }else if(name =="D"){
-            p1.moveRight = true;
-        }else if(name == "W"){
-            p1.shoot = true;
-        }else if(name == "Left"){
-            p2.moveLeft = true;
-        }else if(name == "Right"){
-            p2.moveRight = true;
-        }else if(name == "Up"){
-            p2.shoot = true;
-        }
-    }else if (event.type == SDL_KEYUP) {
-        string name = SDL_GetKeyName(event.key.keysym.sym);
-        if(name=="A"){
+        //failsafe bc idk why the keys are starting to move automatically
+        if(count<2){
             p1.moveLeft = false;
-        }else if(name =="D"){
             p1.moveRight = false;
-        }else if(name == "W"){
             p1.shoot = false;
-        }else if(name == "Left"){
             p2.moveLeft = false;
-        }else if(name == "Right"){
             p2.moveRight = false;
-        }else if(name == "Up"){
             p2.shoot = false;
         }
-    }
+
+        if(event.type == SDL_QUIT) {
+            running = false;
+         }else if(event.type == SDL_MOUSEBUTTONDOWN){
+            int x, y;
+            SDL_GetMouseState(&x, &y);
+            if (x >= RightWinEdge-100 && x <= RightWinEdge && y >= BottonWinEdge && y <= BottonWinEdge+50) {
+                running = false; 
+                p1.lives = 0;
+                p2.lives = 0;
+            }
+         }else if(event.type == SDL_KEYDOWN){
+            string name = SDL_GetKeyName(event.key.keysym.sym);
+            if(name=="A"){p1.moveLeft = true;}
+            else if(name =="D"){p1.moveRight = true;}
+            else if(name == "W"){p1.shoot = true;}
+            else if(name == "Left"){p2.moveLeft = true;}
+            else if(name == "Right"){p2.moveRight = true;}
+            else if(name == "Up"){p2.shoot = true;}
+        }else if(event.type == SDL_KEYUP){
+            string name = SDL_GetKeyName(event.key.keysym.sym);
+            if(name=="A"){p1.moveLeft = false;}
+            else if(name =="D"){p1.moveRight = false;}
+            else if(name == "W"){p1.shoot = false;}
+            else if(name == "Left"){p2.moveLeft = false;}
+            else if(name == "Right"){p2.moveRight = false;}
+            else if(name == "Up"){p2.shoot = false;}
+        }
+            
+        
    }
 }
 
@@ -125,7 +141,7 @@ void Game::render(){ //update everything **if this is too slow might need to ren
 
     //draw stuff
     
-    if((frameCount%10)==0){ //how often to update the image
+    if((frameCount%5)==0){ //how often to update the image
         //gameplay area
         SDL_Rect rect;
         SDL_SetRenderDrawColor(ren, 0, 0, 0, 255); //just a black rectangle
@@ -148,7 +164,7 @@ void Game::render(){ //update everything **if this is too slow might need to ren
         move(); //moves everything 
         hit(); //checks if anything has hit
         draw(); //draws everthing
-        updateScoreBoard(); //DANIS SECTIONNNNNNNNNNNNNNNN
+        updateScoreBoard(); 
     }
 
     SDL_RenderPresent(ren);
@@ -157,14 +173,30 @@ void Game::render(){ //update everything **if this is too slow might need to ren
 
 
 void Game::updateScoreBoard(){
-    /* update the scoreboard:
-    helpful variables are:
-    player one lives is: p1.lives;
-    player two lives is: p2.lives;
-    number of red aliens left is: aliens.numRedAliens;
-    number of blue aliens left is: aliens.numBlueAliens;
 
-    */
+    //write out score and quit
+    SDL_Rect Message_rect = {0, BottonWinEdge+5, 790, 25}; // controls the height of the rect
+    SDL_RenderCopy(ren, sbText, nullptr, &Message_rect);
+    SDL_RenderPresent(ren);
+
+    //add in actual score
+    TTF_Font* Sans = TTF_OpenFont("Graphics/Sans.ttf", 10);
+    SDL_Color White = {255, 255, 255};
+    string text = to_string(p1.lives)+ "                        "+ to_string(p2.lives)+"                   "+ to_string(initialAlienNum*2-aliens.numRedAliens-aliens.numBlueAliens+runningScore);
+    SDL_Surface* surfaceMessage = TTF_RenderText_Solid(Sans, text.c_str(), White); 
+    if (!surfaceMessage) {
+        std::cerr << "Failed to load text! TTF Error: " << TTF_GetError() << std::endl;
+        return;
+    }
+    TTF_CloseFont(Sans);
+    score = SDL_CreateTextureFromSurface(ren, surfaceMessage);
+    SDL_FreeSurface(surfaceMessage);
+
+    SDL_Rect Message_rect2 = {165, BottonWinEdge+5, 465, 25}; // controls the height of the rect
+
+    SDL_RenderCopy(ren, score, nullptr, &Message_rect2);
+    SDL_RenderPresent(ren);
+
 }
 
 
@@ -236,7 +268,7 @@ void Game::move(){
     aliens.moveAlien();
     
     //alien bullets
-    if(alienBulletStack.timeBetweenBullets >= 30-round*2){
+    if(round >6 || alienBulletStack.timeBetweenBullets >= 30-round*4){
         Alien* temp = aliens.head;
         for(int i = 0; i<(aliens.numRedAliens+aliens.numBlueAliens); i++){
             alienBulletStack.append(temp->posX, temp->posY, "White");

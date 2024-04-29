@@ -15,7 +15,7 @@ const int pHeight = 25;
 class Player{
 public:
     Player();
-    Player(string color, int startPos);
+    Player(string color, int startPos, int l);
     //~Player();
 
     void drawPlayer(SDL_Renderer* ren);

@@ -6,6 +6,7 @@
 class alienStack{
 public:
     alienStack();
+    alienStack(int r);
     ~alienStack();
 
 	void append(string c, int num); //add to the beginning

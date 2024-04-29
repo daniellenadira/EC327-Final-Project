@@ -7,6 +7,13 @@ alienStack::alienStack(){
     moveSpeed = 25;
 }
 
+alienStack::alienStack(int r){
+	numRedAliens = 0;
+    numBlueAliens = 0;
+	head = nullptr;
+    moveSpeed = 25+5*r;
+}
+
 
 alienStack::~alienStack(){
 	for(int i = 0; i<(numRedAliens+numBlueAliens);i++){

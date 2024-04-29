@@ -12,11 +12,11 @@ Player::Player(){
     lives = 0;
 }
 
-Player::Player(string color, int startPos){
+Player::Player(string color, int startPos, int l){
     this->color = color;
     posX = startPos;
     posY = 500;
-    lives = 3;
+    lives = l;
 }
 
 void Player::drawPlayer(SDL_Renderer* ren){

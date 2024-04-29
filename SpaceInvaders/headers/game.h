@@ -3,6 +3,7 @@
 
 #include <iostream>
 #include <SDL.h>
+#include <SDL_ttf.h>
 
 #include <player.h>
 #include <stack.h>
@@ -13,18 +14,16 @@ using namespace std;
 //window params
 const int RightWinEdge = 800;
 const int BottonWinEdge = 550;
-
-//color codes 
-const int REDX = 225; const int REDY = 0; const int REDZ = 0;
-const int BLUEX = 0; const int BLUEY = 0; const int BLUEZ = 255;
    
 
 class Game{
     public:
-        Game(int r);
+        Game(int r, int s, int p1Lives, int p2Lives);
         ~Game();
+        bool quit;
 
         int round;
+        int runningScore;
 
         int* loop(); 
         void render(); //for updating screen
@@ -32,7 +31,9 @@ class Game{
         void draw(); 
         void move();
         void hit();
-        void updateScoreBoard(); //DANI DO THE SCOREBOARD STUFF HERE
+        void updateScoreBoard(); 
+        SDL_Texture* score;
+        SDL_Texture* sbText;
         
         //stack for the aliens
         alienStack aliens;
